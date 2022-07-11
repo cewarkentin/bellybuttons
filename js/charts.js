@@ -63,7 +63,6 @@ function buildCharts(sample) {
 
     //  5. Create a variable that holds the first sample in the array.
 
-
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
 
 
