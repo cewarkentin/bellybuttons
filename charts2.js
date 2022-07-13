@@ -34,22 +34,18 @@ function optionChanged(newSample) {
 function buildMetadata(sample) {
   d3.json("samples.json").then((data) => {
     var metadata = data.metadata;
-    // Filter the data for the object with the desired sample number
     var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
     var result = resultArray[0];
-    // Use d3 to select the panel with id of `#sample-metadata`
     var PANEL = d3.select("#sample-metadata");
 
-    // Use `.html("") to clear any existing metadata
     PANEL.html("");
-
-    // Use `Object.entries` to add each key and value pair to the panel
-    // Hint: Inside the loop, you will need to use d3 to append new
-    // tags for each key-value in the metadata.
-    Object.entries(result).forEach(([key, value]) => {
-      PANEL.append("h6").text(`${key.toUpperCase()}: ${value}`);
-    });
-
+    PANEL.append("h6").text("ID:" + result.id);
+    PANEL.append("h6").text("ETHNICITY:" + result.ethnicity);
+    PANEL.append("h6").text("GENDER:" + result.gender);
+    PANEL.append("h6").text("AGE:" + result.age);
+    PANEL.append("h6").text("LOCATION:" + result.location);
+    PANEL.append("h6").text("BBTYPE:" + result.bbtype);
+    PANEL.append("h6").text("WFREQ:" + result.wfreq);
   });
 }
 
@@ -68,25 +64,26 @@ function buildCharts(sample) {
     var otu_ids = filteredSamplesArray.otu_ids;
     var otu_labels = filteredSamplesArray.otu_labels;
     var sample_values = filteredSamplesArray.sample_values;
-
-    // 7. Create the yticks for the bar chart.
-    var yticks = otu_ids.slice(0,10).map(otu_ids => "OTU ${otu_ids}").reverse()
+    
+    // 7. Create the yticks for the bar chart. 
+    var yticks = otu_ids.slice(0,10).map(otu_ids => `OTU ${otu_ids}`).reverse()
 
     // 8. Create the trace for the bar chart. 
-    var barData = [{
+    var trace = {
       x: sample_values.slice(0,10).reverse(),
       y: yticks,
-      type: "horizontalBar",
-      hovertext: otu_labels
-    }];
+      type: "bar",
+      orientation: "h",
+      hovertext: otu_labels,
+    }
 
+    bardata = [trace]
     // 9. Create the layout for the bar chart. 
-    var barLayout = {
+    var layout = {
       title: "Top 10 Bacteria Cultures Found",
       hovermode: "closest"
-    };
-    
+    }
     // 10. Use Plotly to plot the data with the layout. 
-    Plotly.newPlot("bar", barData, barLayout);
+    Plotly.newPlot("bar", bardata, layout)
   });
 }
